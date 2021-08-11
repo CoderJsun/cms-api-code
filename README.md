@@ -11,7 +11,9 @@
 * koa-bodyparser:请求参数解析工具
 * koa-router:路由
 ### 已部署功能
-* /login 登录接口
-* /regsiter 用户注册接口
+> prfile
+  * /login 登录接口
+  * /regsiter 用户注册接口
+
 ### 建议
 相关配置信息建议放到.env中

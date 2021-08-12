@@ -3,7 +3,9 @@ const {
     login
 } = require('../controller/user.controller')
 const {
-    verficationAction
+    verficationAccount,
+    verifyAuthority
+
 } = require('../middleware/auth.middleware')
 
 // 用户登录接口 
@@ -11,7 +13,7 @@ const {
 const user = new Router({
     prefix: '/login'
 })
-user.post('/', verficationAction, login)
+user.post('/', verficationAccount, verifyAuthority, login)
 
 
 module.exports = user

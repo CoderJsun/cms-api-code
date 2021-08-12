@@ -15,6 +15,10 @@ const handleError = (error, ctx) => {
             status = 400
             message = '密码不正确~'
             break;
+        case types.INVALID_TOKEN:
+            status = 400
+            message = '无效的token ~'
+            break;
         case types.ACCOUNT_IS_EXIST:
             status = 405
             message = '账号已存在~'

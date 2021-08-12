@@ -1,16 +1,50 @@
+const jwt = require('jsonwebtoken')
 const {
-    createUser,
-    queryUserById
+    createUser
 } = require('../service/user.service')
+const {
+    privateKey
+} = require('../keys')
+const {
+    use
+} = require('../router/auth.router')
+
 class UserController {
     async create(ctx, next) {
         const result = await createUser(ctx.request.body)
-        return ctx.body = result
+        if (result.length) return {
+            status: 200,
+            data: {
+                msg: '注册成功~',
+            }
+        }
     }
 
     async login(ctx, next) {
-        const result = await queryUserById()
-        return ctx.body = result
+        const {
+            id,
+            name
+        } = ctx.user
+
+        const user = {
+            id,
+            name
+        }
+
+        //颁发令牌 --- 非对称加密
+        const token = jwt.sign(user, privateKey, {
+            expiresIn: 60 * 60,
+            algorithm: 'RS256'
+        })
+
+        return ctx.body = {
+            status: 200,
+            data: {
+                id,
+                name,
+                token
+            }
+        }
     }
 
     async register(ctx, next) {

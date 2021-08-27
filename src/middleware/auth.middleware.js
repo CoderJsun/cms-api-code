@@ -2,13 +2,13 @@ const jwt = require('jsonwebtoken')
 const MD5 = require('../untils/password.handle')
 const types = require('../app/error/error.types')
 const servce = require('../service/user.service')
-
 const {
     publicKey
 } = require('../keys')
 
-// 账号权限验证
+// 账号鉴权
 const verficationAccount = async (ctx, next) => {
+    console.log('验证verficationAccount ~')
     const {
         name,
         password
@@ -21,7 +21,7 @@ const verficationAccount = async (ctx, next) => {
     }
 
     // 2.验证用户名和密码
-    const result = await servce.queryUser(name)
+    const [result] = await servce.queryAccount(name)
     const user = result[0]
     if (!user) {
         const error = new Error(types.ACCOUNT_NOT_FOUND)
@@ -37,15 +37,13 @@ const verficationAccount = async (ctx, next) => {
     // 将用户信息进行绑定
     ctx.user = user
 
-    console.log('middleware 验证通过 ~')
-
     // 4.执行任务
     await next()
 }
 
-// 鉴权
+// 权限鉴权
 const verifyAuthority = async (ctx, next) => {
-    console.log('verifyAuthority~')
+    console.log('验证verifyAuthority ~')
     // 获取  const authorization = ctx.headers.authorization
     const authority = ctx.headers.authorization
     if (!authority) {
@@ -60,8 +58,6 @@ const verifyAuthority = async (ctx, next) => {
             algorithms: ['RS256']
         })
 
-        console.log(result)
-
         if (result) {
             ctx.user = result
         }
@@ -73,9 +69,8 @@ const verifyAuthority = async (ctx, next) => {
         const error = new Error(types.INVALID_TOKEN)
         return ctx.app.emit('error', error, ctx)
     }
-
-
 }
+
 
 
 module.exports = {

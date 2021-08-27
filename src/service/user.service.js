@@ -1,20 +1,16 @@
 const db = require("../app/db");
 class UserService {
-  async createUser(params) {
-    const {
-      name,
-      password
-    } = params;
+  async createAccount(name, password) {
     const sql = `INSERT INTO t_users (name,password) values(?,?)`;
     const result = await db.execute(sql, [name, password]);
-    return result[0];
+    return result;
   }
 
   // 查询用户
-  async queryUser(name) {
+  async queryAccount(name) {
     const sql = `SELECT * FROM t_users WHERE name=?`;
     const result = await db.execute(sql, [name]);
-    return result[0];
+    return result;
   }
 }
 module.exports = new UserService();

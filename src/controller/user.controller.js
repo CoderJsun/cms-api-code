@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const {
-    createUser
+    createAccount
 } = require('../service/user.service')
 const {
     privateKey
@@ -11,11 +11,19 @@ const {
 
 class UserController {
     async create(ctx, next) {
-        const result = await createUser(ctx.request.body)
-        if (result.length) return {
-            status: 200,
-            data: {
-                msg: '注册成功~',
+        const {
+            name,
+            password
+        } = ctx.request.body
+
+        const [result] = await createAccount(name, password)
+
+        if (result) {
+            return ctx.body = {
+                status: 200,
+                data: {
+                    msg: '注册成功~'
+                }
             }
         }
     }
@@ -45,11 +53,6 @@ class UserController {
                 token
             }
         }
-    }
-
-    async register(ctx, next) {
-        const result = await register()
-        return ctx.body = result
     }
 }
 

@@ -1,11 +1,12 @@
 const types = require('../app/error/error.types')
 const {
-    queryUser
+    queryAccount
 } = require('../service/user.service')
 const MD5 = require('../untils/password.handle')
 
+
 // 账号处理中间件
-const queryAccount = async (ctx, next) => {
+const checkAccount = async (ctx, next) => {
     const {
         name,
         password
@@ -18,9 +19,10 @@ const queryAccount = async (ctx, next) => {
     }
 
     // 2.查询账号
-    const result = await queryUser(name)
+    const result = await queryAccount(name)
     const user = result[0]
-    if (user.length) {
+
+    if (user && user.length) {
         const error = new Error(types.ACCOUNT_IS_EXIST)
         return ctx.app.emit('error', error, ctx)
     }
@@ -30,7 +32,7 @@ const queryAccount = async (ctx, next) => {
 }
 
 // 密码处理
-const handlepassword = async (ctx, next) => {
+const handlePassword = async (ctx, next) => {
     const {
         password
     } = ctx.request.body
@@ -40,7 +42,10 @@ const handlepassword = async (ctx, next) => {
     await next()
 }
 
+
+
+
 module.exports = {
-    queryAccount,
-    handlepassword
+    checkAccount,
+    handlePassword
 }

@@ -3,15 +3,15 @@ const {
     create
 } = require('../controller/user.controller')
 const {
-    queryAccount,
-    handlepassword
-} = require('../middleware/handle.middleware')
+    checkAccount,
+    handlePassword
+} = require('../middleware/process.middleware')
 
 // 用户注册接口
 const regsiter = new Router({
     prefix: '/regsiter'
 })
-regsiter.post('/', queryAccount, handlepassword, create)
+regsiter.post('/', checkAccount, handlePassword, create)
 
 
 module.exports = regsiter
